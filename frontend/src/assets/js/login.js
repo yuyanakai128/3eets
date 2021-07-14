@@ -20,7 +20,7 @@ export function login(email, password){
             
             if(response.data){
               alert('ログイン成功しました');
-              window.location.assign('/');
+              window.location.assign('/users/home');
             }
             else alert("メールアドレスまたはパスワードが間違っています！");
         })
