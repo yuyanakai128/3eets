@@ -1,0 +1,16 @@
+.login {
+	width: 370px;
+	margin: auto;
+	margin-top: 60px;
+}
+.login button {
+	/* background-color: rgba(238,184,43,1) !important; */
+}
+.login>form:first-child {
+	border-top: 2px solid rgba(228,228,228,1);
+	border-bottom: 2px solid rgba(228,228,228,1);
+	padding: 50px 20px 0 20px;
+}
+.login>div:last-child {
+	padding: 0 20px;
+}

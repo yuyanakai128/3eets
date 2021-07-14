@@ -1,0 +1,23 @@
+
+.navbar {
+
+	background-color: white;
+	border-bottom: 2px solid #00d1b2;
+	/* border-bottom: 2px solid rgba(238,184,43,1); */
+}
+
+.navContainer {
+	display: flex;
+}
+.navSearchSp {
+	display: none;
+}
+
+@media (max-width: 550px) {
+	.navSearchPc {
+		display: none;
+	}
+	.navSearchSp {
+		display: block;
+	}
+}

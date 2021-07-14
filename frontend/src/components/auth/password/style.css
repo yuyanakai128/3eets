@@ -1,0 +1,12 @@
+.login {
+	width: 370px;
+	margin: auto;
+	margin-top: 60px;
+}
+
+.login>form:first-child {
+	padding: 50px 20px 0 20px;
+}
+.login>div:last-child {
+	padding: 0 20px;
+}
