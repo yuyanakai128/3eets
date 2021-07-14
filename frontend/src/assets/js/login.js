@@ -19,13 +19,13 @@ export function login(email, password){
         .then(function (response) {
             
             if(response.data){
-              alert('ok');
+              alert('ログイン成功しました');
               window.location.assign('/');
             }
-            else alert("password or id is incorrect!");
+            else alert("メールアドレスまたはパスワードが間違っています！");
         })
         .catch(function (error) {
-          alert("login failed")
+          alert("ログインに失敗しました")
         });
     }
 }
