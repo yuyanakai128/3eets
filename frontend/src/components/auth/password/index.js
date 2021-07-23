@@ -9,10 +9,7 @@ const Password = () => {
     async function PasswordBack(event){
         event.preventDefault();
         var email =  document.getElementById('email').value;
-		if (email=="") {
-			alert("enter your email");
-			return;
-		}
+		
         await getUserData(email);
     }
 	return (
@@ -24,7 +21,7 @@ const Password = () => {
 				<div class="field">
 					<label class="is-size-6"><strong>Email</strong></label>
 					<div class="control">
-						<input class="input" type="email" name="email" id="email" placeholder="" />
+						<input class="input" type="email" name="email" id="email" placeholder="" required/>
 					</div>
 				</div>
 				<div class="field mt-6">

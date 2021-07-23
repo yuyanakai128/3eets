@@ -1,4 +1,5 @@
 flask
+pytest
 flask_restful
 flask-bcrypt
 PyJWT==1.7.1

@@ -17,10 +17,9 @@ export function login(email, password){
         };
         axios(config)
         .then(function (response) {
-            
-            if(response.data){
+            if(response.data==true){
               alert('ログイン成功しました');
-              window.location.assign('/users/home');
+              // window.location.assign('/users/home');
             }
             else alert("メールアドレスまたはパスワードが間違っています！");
         })

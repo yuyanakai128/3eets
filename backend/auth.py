@@ -7,7 +7,7 @@ from flask_bcrypt import Bcrypt
 import datetime
 from flask_cors import CORS
 from random import randint
-
+import iroha_sdk
 from flask_mail import Mail, Message
 
 app = Flask(__name__)

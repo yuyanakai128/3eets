@@ -9,10 +9,7 @@ const Register = () => {
 		var email = document.getElementById('email').value;
         var password = document.getElementById("password").value;
 		var password_r = document.getElementById("password_r").value;
-		if (password != password_r) {
-			alert("password not match");
-			return
-		}
+		
         await register(name, email, password);
     }
 	return (
@@ -23,25 +20,25 @@ const Register = () => {
 					<div class="field mb-5">
 						<label class="is-size-6"><strong>名前</strong></label>
 						<div class="control">
-							<input class="input" name="name" id="name" type="text" placeholder="e.g Alex Smith" />
+							<input class="input" name="name" id="name" type="text" placeholder="" required/>
 						</div>
 					</div>
 					<div class="field mb-5">
 						<label class="is-size-6"><strong>Email</strong></label>
 						<div class="control">
-							<input class="input" name="email" id="email" type="email" placeholder="" />
+							<input class="input" name="email" id="email" type="email" placeholder="" required/>
 						</div>
 					</div>
 					<div class="field mb-5">
 						<label class="is-size-6"><strong>パスワード</strong></label>
 						<div class="control">
-							<input class="input" name="password" id="password" type="password" placeholder="" />
+							<input class="input" name="password" id="password" type="password" placeholder="" required/>
 						</div>
 					</div>
 					<div class="field mb-5">
 						<label class="is-size-6"><strong>パスワード</strong></label>
 						<div class="control">
-							<input class="input" name="password_r" id="password_r" type="password" placeholder="" />
+							<input class="input" name="password_r" id="password_r" type="password" placeholder="" required/>
 						</div>
 					</div>
 				</div>
