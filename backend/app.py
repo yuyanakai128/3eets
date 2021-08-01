@@ -1,205 +1,239 @@
-#!/usr/bin/env python3
-#
-# Copyright Soramitsu Co., Ltd. All Rights Reserved.
-# SPDX-License-Identifier: Apache-2.0
-#
+from datetime import date
+from flask import Flask, request, jsonify, make_response
+from flask_restful import Resource, Api
+from functools import wraps
+import jwt
+from flask_bcrypt import Bcrypt
+import datetime
+from flask_cors import CORS
+from random import randint
+
+from flask_mail import Mail, Message
+
+app = Flask(__name__)
+api = Api(app)
+bcrypt = Bcrypt(app)
+# cors = CORS(app, resources={r"/*": {"origins": "*"}})
+CORS(app, resources=r'/*')
+
+app.config["SECRET_KEY"] = "thisi-sth(esecret_key"
+# mail thing here
+app.config['MAIL_SERVER']='smtp.yandex.com'
+app.config['MAIL_PORT'] = 587
+app.config['MAIL_USERNAME'] = ''
+app.config['MAIL_PASSWORD'] = ''
+app.config['MAIL_USE_TLS'] = False
+app.config['MAIL_USE_SSL'] = True
+# mail end here
+
+mail = Mail(app)
 
 
-# Here are Iroha dependencies.
-# Python library generally consists of 3 parts:
-# Iroha, IrohaCrypto and IrohaGrpc which we need to import:
-import os
-import binascii
-from iroha import IrohaCrypto
-from iroha import Iroha, IrohaGrpc
+def token_required(f):
+    @wraps(f)
+    def decorated(*args, **kwargs):
+        token = request.args.get("token") # http://127.0.0.1:5000/route?token=sdasdasdaqwesadaw
+        if not token:
+            return jsonify({"msg" : "Token is missing!", "status": 402})
 
-# The following line is actually about the permissions
-# you might be using for the transaction.
-# You can find all the permissions here: 
-# https://iroha.readthedocs.io/en/main/develop/api/permissions.html
-from iroha.primitive_pb2 import can_set_my_account_detail
-import sys
+        try:
+            data = jwt.decode(token, app.config["SECRET_KEY"])
 
-if sys.version_info[0] < 3:
-    raise Exception('Python 3 or a more recent version is required.')
+        except:
+            return jsonify({"msg" : "Token is invalid!", "status": 403})
 
-# Here is the information about the environment and admin account information:
-IROHA_HOST_ADDR = os.getenv('IROHA_HOST_ADDR', 'localhost')
-# IROHA_PORT = os.getenv('IROHA_PORT', '50051')
-IROHA_PORT = os.getenv('IROHA_PORT', '61450')
-ADMIN_ACCOUNT_ID = os.getenv('ADMIN_ACCOUNT_ID', 'admin@test')
-ADMIN_PRIVATE_KEY = os.getenv(
-    'ADMIN_PRIVATE_KEY', 'f101537e319568c765b2cc89698325604991dca57b9716b58016b253506cab70')
+        return f(*args, **kwargs)
 
-# Here we will create user keys
-user_private_key = IrohaCrypto.private_key()
-user_public_key = IrohaCrypto.derive_public_key(user_private_key)
-iroha = Iroha(ADMIN_ACCOUNT_ID)
-net = IrohaGrpc('{}:{}'.format(IROHA_HOST_ADDR, IROHA_PORT))
+    return decorated
 
+def UserExist(username):
+    if users.find({"username": username}).count() == 0:
+        return False
+    else: 
+        return True
 
-def trace(func):
-    """
-    A decorator for tracing methods' begin/end execution points
-    """
+def EmailExist(email):
+    if users.find({"email": email}).count() == 0:
+        return False
+    else: 
+        return True
 
-    def tracer(*args, **kwargs):
-        name = func.__name__
-        print('\tEntering "{}"'.format(name))
-        result = func(*args, **kwargs)
-        print('\tLeaving "{}"'.format(name))
-        return result
+def verifyPw(username, password):
+    if not UserExist(username):
+        return False
 
-    return tracer
+    hashed_pw = users.find({
+        "username": username
+    })[0]["password"]
 
-# Let's start defining the commands:
-@trace
-def send_transaction_and_print_status(transaction):
-    hex_hash = binascii.hexlify(IrohaCrypto.hash(transaction))
-    print('Transaction hash = {}, creator = {}'.format(
-        hex_hash, transaction.payload.reduced_payload.creator_account_id))
-    net.send_tx(transaction)
-    for status in net.tx_status_stream(transaction):
-        print(status)
+    if bcrypt.hashpw(password.encode("utf8"), hashed_pw) == hashed_pw:
+        return True
+    else:
+        return False
 
-# For example, below we define a transaction made of 2 commands:
-# CreateDomain and CreateAsset.
-# Each of Iroha commands has its own set of parameters and there are many commands.
-# You can check out all of them here:
-# https://iroha.readthedocs.io/en/main/develop/api/commands.html
-@trace
-def create_domain_and_asset():
-    """
-    Create domain 'domain' and asset 'coin#domain' with precision 2
-    """
-    commands = [
-        iroha.command('CreateDomain', domain_id='domain', default_role='user'),
-        iroha.command('CreateAsset', asset_name='coin',
-                      domain_id='domain', precision=2)
-    ]
-# And sign the transaction using the keys from earlier:
-    tx = IrohaCrypto.sign_transaction(
-        iroha.transaction(commands), ADMIN_PRIVATE_KEY)
-    send_transaction_and_print_status(tx)
-# You can define queries 
-# (https://iroha.readthedocs.io/en/main/develop/api/queries.html) 
-# the same way.
+def verifyPwWithEmail(email, password):
+    if not EmailExist(email):
+        return False
 
-@trace
-def add_coin_to_admin():
-    """
-    Add 1000.00 units of 'coin#domain' to 'admin@test'
-    """
-    tx = iroha.transaction([
-        iroha.command('AddAssetQuantity',
-                      asset_id='coin#domain', amount='1000.00')
-    ])
-    IrohaCrypto.sign_transaction(tx, ADMIN_PRIVATE_KEY)
-    send_transaction_and_print_status(tx)
+    hashed_pw = users.find({
+        "email": email
+    })[0]["password"]
+
+    if bcrypt.hashpw(password.encode("utf8"), hashed_pw) == hashed_pw:
+        return True
+    else:
+        return False
+
+def updateVerificationCode(email):
+    code = users.find({
+            "email": email
+        })[0]["verification_code"]
+
+    generated_code = randint(10000, 99999)
+    
+    users.update({"verification_code" : code}, {"$set" : {"verification_code": generated_code}})
+
+    return generated_code
 
 
-@trace
-def create_account_userone():
-    """
-    Create account 'userone@domain'
-    """
-    tx = iroha.transaction([
-        iroha.command('CreateAccount', account_name='userone', domain_id='domain',
-                      public_key=user_public_key)
-    ])
-    IrohaCrypto.sign_transaction(tx, ADMIN_PRIVATE_KEY)
-    send_transaction_and_print_status(tx)
+def GetCodeFromDb(email):
+    code = users.find({
+            "email": email
+        })[0]["verification_code"]
+    print("Code Here : ", code)
+    return code
+
+def setNewPassword(email, updated_password):
+    password = users.find({
+            "email": email
+        })[0]["password"]
+    
+    users.update({"password" : password}, {"$set" : {"password": updated_password}})    
+
+class Register(Resource):
+    def post(self):
+        postedData = request.get_json()
+        name = postedData["name"]
+        email = postedData["email"]
+        password = postedData["password"]
+        if name and email and password:
+            hashed_pw = bcrypt.generate_password_hash(email+password).decode('utf-8')
+            retJson = {
+                "name": name,
+                "password": hashed_pw
+            }
+
+            return jsonify(retJson)
+        
+        retJson = {
+            "status" : 303,
+            "msg" : "Please fill all the fields."
+        }
+        return jsonify(retJson)
+
+class Login(Resource):
+    def post(self):
+        postedData = request.get_json()
+        email = postedData["email"] 
+        password = postedData["password"]
+        chk_password = postedData["chk_password"]
+        
+        if email and password and chk_password:
+            result = bcrypt.check_password_hash(chk_password, email+password)
+           
+            return result
+
+        retJson = {
+            "msg" : "Fields can not be empty. Login required!",
+            "status" : 401
+        }
+        return jsonify(retJson)
+
+class ForgetPass(Resource):
+    def post(self):
+        postedData = request.get_json()
+
+        email = postedData["email"]
+        new_password = postedData["newPassword"]
+        confirm_password = postedData["confirmPassword"]
+        code = postedData["code"]
+
+        if email and new_password and confirm_password and code:
+
+            if new_password != confirm_password:
+                retJson = {
+                    "msg": "Password doesn't match!",
+                    "status" : 301 
+                }
+                return jsonify(retJson)
+
+            db_code = GetCodeFromDb(email)
+
+            if db_code != code:
+                retJson = {
+                    "msg": "The code didn't match!",
+                    "status" : 302 
+                }
+                return jsonify(retJson)
+            
+            hashed_password = bcrypt.hashpw(new_password.encode('utf8'), bcrypt.gensalt())
+            setNewPassword(email, hashed_password)
+
+            retJson = {
+                "msg" : "Password updated successfully.",
+                "status" : 200
+            }
+            return jsonify(retJson)
+
+        retJson = {
+            "message" : "Please fill all the fields",
+            "status" : 303
+        }
+            
+        return retJson
 
 
-@trace
-def transfer_coin_from_admin_to_userone():
-    """
-    Transfer 2.00 'coin#domain' from 'admin@test' to 'userone@domain'
-    """
-    tx = iroha.transaction([
-        iroha.command('TransferAsset', src_account_id='admin@test', dest_account_id='userone@domain',
-                      asset_id='coin#domain', description='init top up', amount='2.00')
-    ])
-    IrohaCrypto.sign_transaction(tx, ADMIN_PRIVATE_KEY)
-    send_transaction_and_print_status(tx)
+class SendVerificationCode(Resource):
+    def post(self):
+        postedData = request.get_json()
+        email = postedData["email"]
+        
+        if email:
+            if not EmailExist(email):
+                retJson = {
+                    "msg" : "No such registered email",
+                    "status" : 303
+                }
+                return jsonify(retJson)
+
+            code = updateVerificationCode(email)
+            msg = Message('Covid Tracker: {}'.format(code), sender = 'furqan4545@yandex.ru', recipients = [email])
+            msg.body = "Here is your verification code: {}".format(code)
+            mail.send(msg)
+
+            retJson = {
+                "msg": "Email has been sent to the registered email",
+                "status" : 200
+            }            
+            return jsonify(retJson)
+
+        retJson = {
+            "msg": "Email field can't be empty!",
+            "status": 302
+        }
+        return jsonify(retJson)
 
 
-@trace
-def userone_grants_to_admin_set_account_detail_permission():
-    """
-    Make admin@test able to set detail to userone@domain
-    """
-    tx = iroha.transaction([
-        iroha.command('GrantPermission', account_id='admin@test',
-                      permission=can_set_my_account_detail)
-    ], creator_account='userone@domain')
-    IrohaCrypto.sign_transaction(tx, user_private_key)
-    send_transaction_and_print_status(tx)
+@app.route("/protected") 
+@token_required
+def protected():
+    return jsonify({"msg": "This is only available to people with valid token!"})
 
 
-@trace
-def set_age_to_userone():
-    """
-    Set age to userone@domain by admin@test
-    """
-    tx = iroha.transaction([
-        iroha.command('SetAccountDetail',
-                      account_id='userone@domain', key='age', value='18')
-    ])
-    IrohaCrypto.sign_transaction(tx, ADMIN_PRIVATE_KEY)
-    send_transaction_and_print_status(tx)
+api.add_resource(Register, '/register')
+api.add_resource(Login, '/login')
+api.add_resource(SendVerificationCode, '/sendcode')
+api.add_resource(ForgetPass, '/resetpass')
 
-
-@trace
-def get_coin_info():
-    """
-    Get asset info for coin#domain
-    :return:
-    """
-    query = iroha.query('GetAssetInfo', asset_id='coin#domain')
-    IrohaCrypto.sign_query(query, ADMIN_PRIVATE_KEY)
-
-    response = net.send_query(query)
-    data = response.asset_response.asset
-    print('Asset id = {}, precision = {}'.format(data.asset_id, data.precision))
-
-
-@trace
-def get_account_assets():
-    """
-    List all the assets of userone@domain
-    """
-    query = iroha.query('GetAccountAssets', account_id='userone@domain')
-    IrohaCrypto.sign_query(query, ADMIN_PRIVATE_KEY)
-
-    response = net.send_query(query)
-    data = response.account_assets_response.account_assets
-    for asset in data:
-        print('Asset id = {}, balance = {}'.format(
-            asset.asset_id, asset.balance))
-
-
-@trace
-def get_userone_details():
-    """
-    Get all the kv-storage entries for userone@domain
-    """
-    query = iroha.query('GetAccountDetail', account_id='userone@domain')
-    IrohaCrypto.sign_query(query, ADMIN_PRIVATE_KEY)
-
-    response = net.send_query(query)
-    data = response.account_detail_response
-    print('Account id = {}, details = {}'.format('userone@domain', data.detail))
-
-# Let's run the commands defined previously:
-create_domain_and_asset()
-add_coin_to_admin()
-create_account_userone()
-transfer_coin_from_admin_to_userone()
-userone_grants_to_admin_set_account_detail_permission()
-set_age_to_userone()
-get_coin_info()
-get_account_assets()
-get_userone_details()
-
-print('done')
+if __name__ == '__main__':
+    app.run(host="0.0.0.0")
