@@ -1,5 +1,6 @@
 from flask import Flask
 from routes import hello_world
+import auth
 import os
 
 
@@ -8,9 +9,7 @@ dir = os.path.abspath(os.path.dirname(__file__))
 
 def create_app(config_filename=None):
 
-    app = Flask(__name__,
-                static_folder=os.path.join(dir, '../public'),
-                static_url_path='/')
+    app = Flask(__name__)
 
     if not config_filename:
         config_filename = os.environ['APP_SETTINGS']
@@ -18,6 +17,7 @@ def create_app(config_filename=None):
     app.config.from_object(config_filename)
 
     app.register_blueprint(hello_world.bp)
+    app.register_blueprint(auth.bp)
 
     @app.route('/')
     def index():

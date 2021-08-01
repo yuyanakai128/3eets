@@ -25,7 +25,8 @@ if sys.version_info[0] < 3:
 
 # Here is the information about the environment and admin account information:
 IROHA_HOST_ADDR = os.getenv('IROHA_HOST_ADDR', 'localhost')
-IROHA_PORT = os.getenv('IROHA_PORT', '50051')
+# IROHA_PORT = os.getenv('IROHA_PORT', '50051')
+IROHA_PORT = os.getenv('IROHA_PORT', '61450')
 ADMIN_ACCOUNT_ID = os.getenv('ADMIN_ACCOUNT_ID', 'admin@test')
 ADMIN_PRIVATE_KEY = os.getenv(
     'ADMIN_PRIVATE_KEY', 'f101537e319568c765b2cc89698325604991dca57b9716b58016b253506cab70')

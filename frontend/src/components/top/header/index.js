@@ -24,13 +24,6 @@ const Header = () => (
 				</div>
 			</div>
 		</div>
-		
-	
-		<div class={style.navSearchSp}>
-			<div class="control navbar-item">
-				<input class="input" type="text" placeholder="search" />
-			</div>
-		</div>
 	</nav>
 );
 
