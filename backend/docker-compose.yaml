@@ -1,0 +1,49 @@
+version: "3.8"
+
+# Defining the behaviour of the containers
+services:
+
+  web:
+    build: .
+    ports:
+      - "5000:5000"
+    volumes:
+      - ".:/code"
+    networks:
+      - iroha-network
+  postgresDB:
+    image: postgres:9.5
+    restart: always
+    ports:
+      - "5432:5432"
+    networks:
+      - iroha-network
+    environment:
+      - POSTGRES_USER=root
+      - POSTGRES_PASSWORD=root
+      - POSTGRES_DB=irohadb
+
+  irohaNode:
+    image: hyperledger/iroha:latest
+    restart: always
+    networks:
+      - iroha-network
+    ports:
+      - "50051:50051"
+    volumes:
+      - "./iroha:/opt/iroha_data"
+      - "store:/tmp/block_store"
+    environment:
+      - IROHA_POSTGRES_HOST=postgresDB
+      - POSTGRES_PORT=5432
+      - POSTGRES_PASSWORD=root
+      - POSTGRES_USER=root
+      - KEY=node0
+    depends_on:
+      - postgresDB
+
+networks:
+  iroha-network:
+
+volumes:
+  store:

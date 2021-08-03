@@ -10,7 +10,17 @@ from random import randint
 
 from flask_mail import Mail, Message
 
-# from iroha_sdk import Iroha
+from iroha_sdk import Iroha
+
+
+
+from flask import Blueprint
+
+bp_auth = Blueprint('example_blueprint', __name__)
+
+@example_blueprint.route('/')
+def index():
+    return "This is an example app"
 
 app = Flask(__name__)
 api = Api(app)
