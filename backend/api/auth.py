@@ -1,6 +1,6 @@
 from datetime import date
-from flask import Flask, request, jsonify, make_response
-from flask_restful import Resource, Api
+from flask import Blueprint, current_app, jsonify, request
+from flask_restful import Resource, Api, abort, reqparse
 from functools import wraps
 import jwt
 from flask_bcrypt import Bcrypt
@@ -10,36 +10,13 @@ from random import randint
 
 from flask_mail import Mail, Message
 
-from iroha_sdk import Iroha
+# from iroha_sdk import Iroha
 
 
+bp_auth = Blueprint('auth', __name__)
+auth = Api(bp_auth)
 
-from flask import Blueprint
-
-bp_auth = Blueprint('example_blueprint', __name__)
-
-@example_blueprint.route('/')
-def index():
-    return "This is an example app"
-
-app = Flask(__name__)
-api = Api(app)
-bcrypt = Bcrypt(app)
-# cors = CORS(app, resources={r"/*": {"origins": "*"}})    
-CORS(app, resources=r'/*')
-
-app.config["SECRET_KEY"] = "thisi-sth(esecret_key"
-# mail thing here
-app.config['MAIL_SERVER']='smtp.yandex.com'
-app.config['MAIL_PORT'] = 587
-app.config['MAIL_USERNAME'] = ''
-app.config['MAIL_PASSWORD'] = ''
-app.config['MAIL_USE_TLS'] = False
-app.config['MAIL_USE_SSL'] = True
-# mail end here
-
-mail = Mail(app)
-
+bcrypt = Bcrypt()
 
 def token_required(f):
     @wraps(f)
@@ -123,7 +100,9 @@ def setNewPassword(email, updated_password):
     users.update({"password" : password}, {"$set" : {"password": updated_password}})    
 
 class Register(Resource):
+    """This is a register function."""
     def post(self):
+
         postedData = request.get_json()
         name = postedData["name"]
         email = postedData["email"]
@@ -144,15 +123,14 @@ class Register(Resource):
         return jsonify(retJson)
 
 class Login(Resource):
+    """This is a login function."""
     def post(self):
         postedData = request.get_json()
         email = postedData["email"] 
         password = postedData["password"]
         chk_password = postedData["chk_password"]
-        
         if email and password and chk_password:
             result = bcrypt.check_password_hash(chk_password, email+password)
-           
             return result
 
         retJson = {
@@ -164,7 +142,6 @@ class Login(Resource):
 class ForgetPass(Resource):
     def post(self):
         postedData = request.get_json()
-
         email = postedData["email"]
         new_password = postedData["newPassword"]
         confirm_password = postedData["confirmPassword"]
@@ -236,16 +213,15 @@ class SendVerificationCode(Resource):
         return jsonify(retJson)
 
 
-@app.route("/protected") 
-@token_required
-def protected():
-    return jsonify({"msg": "This is only available to people with valid token!"})
+# @app.route("/protected") 
+# @token_required
+# def protected():
+#     return jsonify({"msg": "This is only available to people with valid token!"})
 
+auth.add_resource(Register, '/register')
 
-api.add_resource(Register, '/register')
-api.add_resource(Login, '/login')
-api.add_resource(SendVerificationCode, '/sendcode')
-api.add_resource(ForgetPass, '/resetpass')
+auth.add_resource(Login, '/login')
 
-if __name__ == '__main__':
-    app.run(host="0.0.0.0")
+auth.add_resource(SendVerificationCode, '/sendcode')
+
+auth.add_resource(ForgetPass, '/resetpass')

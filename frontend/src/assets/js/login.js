@@ -1,5 +1,5 @@
 import axios from 'axios';
-const apiurl = "http://localhost:5000";
+const apiurl = "http://localhost:5000/api/auth";
 // const apiurl = process.env.PREACT_APP_API_BASE_URL;
 
 export function login(email, password){
