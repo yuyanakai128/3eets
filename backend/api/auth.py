@@ -1,5 +1,5 @@
 from datetime import date
-from flask import Blueprint, current_app, jsonify, request
+from flask import Blueprint, jsonify, request
 from flask_restful import Resource, Api, abort, reqparse
 from functools import wraps
 import jwt
