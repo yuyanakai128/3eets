@@ -32,6 +32,17 @@ def create_asset():
     res=iroha_sdk.create_asset(asset_name, domain_id,precision)
     return res
 
+@bp_goods.route('/search', methods=['POST'])
+def search():
+    """
+    search function
+    """
+    postedData = request.get_json()
+    # postedData = request.form.to_dict()
+    asset_id = postedData['asset_id']
+    res=iroha_sdk.get_coin_info(asset_id + "#test")
+    return res
+
 @bp_goods.route('/add_coin_to_admin', methods=['POST'])
 def add_coin_to_admin():
     """

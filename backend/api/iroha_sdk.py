@@ -1,4 +1,3 @@
-
 import os
 import binascii
 from iroha import IrohaCrypto
@@ -180,10 +179,16 @@ def get_coin_info(asset_id):
 
     response = net.send_query(query)
     data = response.asset_response.asset
-    print('Asset id = {}, precision = {}'.format(data.asset_id, data.precision))
+    jsonstr={
+        'asset_id':data.asset_id,
+        'domain_id':data.domain_id,
+        'precision':data.precision
+    }
+    return (jsonstr)
+    # print('Asset id = {}, precision = {}'.format(data.asset_id, data.precision))
 
 
-@trace
+# @trace
 def get_account_assets(account_id):
     """
     List all the assets of userone@domain
@@ -191,12 +196,18 @@ def get_account_assets(account_id):
     query = iroha.query('GetAccountAssets', account_id=account_id)
     # query = iroha.query('GetAccountAssets', account_id='userone@domain')
     IrohaCrypto.sign_query(query, ADMIN_PRIVATE_KEY)
-
     response = net.send_query(query)
     data = response.account_assets_response.account_assets
-    for asset in data:
-        print('Asset id = {}, balance = {}'.format(
-            asset.asset_id, asset.balance))
+    jsonstr={
+        'asset_id':data[0].asset_id,
+        'account_id':data[0].account_id,
+        'balance':data[0].balance,
+    }
+    return (jsonstr)
+    # return data
+    # for asset in data:
+    #     print('Asset id = {}, balance = {}'.format(
+    #         asset.asset_id, asset.balance))
 
 
 @trace
@@ -211,4 +222,3 @@ def get_userone_details(account_id):
     response = net.send_query(query)
     data = response.account_detail_response
     print('Account id = {}, details = {}'.format('userone@domain', data.detail))
-
