@@ -221,4 +221,8 @@ def get_userone_details(account_id):
 
     response = net.send_query(query)
     data = response.account_detail_response
-    print('Account id = {}, details = {}'.format('userone@domain', data.detail))
+    jsonstr={
+        
+    }
+    return (jsonstr)
+    # print('Account id = {}, details = {}'.format('userone@domain', data.detail))
