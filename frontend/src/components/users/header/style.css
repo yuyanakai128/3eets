@@ -2,17 +2,47 @@
 .navbar {
 
 	background-color: white;
-	border-bottom: 2px solid #00d1b2;
+	border-bottom: 2px solid rgba(238,184,43,1);
 	/* border-bottom: 2px solid rgba(238,184,43,1); */
 }
-
+.h_title {
+	font-size: 20px;
+}
 .navContainer {
 	display: flex;
 }
 .navSearchSp {
 	display: none;
 }
-
+.Icon_metro_search_dgg {
+	overflow: visible;
+	position: absolute;
+	width: 15px;
+	height: 27px;
+	right: 30px;
+	top: 12.5px;
+	-webkit-transform: matrix(1,0,0,1,0,0);
+	-ms-transform: matrix(1,0,0,1,0,0);
+	transform: matrix(1,0,0,1,0,0);
+}
+.Icon_material_playlist_add_che_dgb {
+	overflow: visible;
+	position: absolute;
+	width: 25.733px;
+	height: 17.156px;
+	left: 334.267px;
+	top: 16.422px;
+	transform: matrix(1,0,0,1,0,0);
+}
+._4_dgc {
+	position: absolute;
+	overflow: visible;
+	width: 9px;
+	height: 9px;
+	left: 351px;
+	top: 12px;
+	fill: rgba(238,184,43,1);
+}
 @media (max-width: 550px) {
 	.navSearchPc {
 		display: none;

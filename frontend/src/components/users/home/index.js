@@ -1,11 +1,13 @@
 import style from "./style.css";
 import Header from "../header";
+import Common from "../common";
 
 // base_url = "http://localhost:8080";
 
 const Dashborad = () => (
 	<>
 	<Header />
+	<Common />
 	<div class="is-flex is-flex-wrap-wrap p-3">
 		<div class="good-container mx-2">
 			<img class={style.goodsImg} src="../assets/image/test.png"/>

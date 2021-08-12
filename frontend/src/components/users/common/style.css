@@ -1,0 +1,71 @@
+#toptab {
+  display: flex;
+  width: 100%;
+  align-items: center;
+}
+#exchange {
+  width: 50%;
+  white-space: nowrap;
+  line-height: 21px;
+  text-align: center;
+  font-family: Futura;
+  font-style: normal;
+  font-weight: bold;
+  font-size: 14px;
+  color: rgba(129,129,129,1);
+  padding:15px;
+  letter-spacing: 0.7px;
+  border-bottom: 3px solid rgba(228,228,228,1);
+}
+#purchase {
+  width: 50%;
+  padding:15px;
+  white-space: nowrap;
+  line-height: 21px;
+  text-align: center;
+  font-family: Futura;
+  font-style: normal;
+  font-weight: bold;
+  font-size: 14px;
+  color: rgba(129,129,129,1);
+  letter-spacing: 0.7px;
+  border-bottom: 3px solid rgba(228,228,228,1);
+}
+#ID3tab_dev {
+  display: flex;
+  width: 100%;
+  padding:10px;
+  align-items: center;
+}
+#recommendation {
+  width: 50%;
+  white-space: nowrap;
+  line-height: 21px;
+  text-align: center;
+  font-family: Futura;
+  font-style: normal;
+  font-weight: bold;
+  font-size: 14px;
+  color: rgba(129,129,129,1);
+  letter-spacing: 0.7px;
+  padding: 15px;
+  border-bottom: 3px solid rgba(228,228,228,1);
+}
+#mylist {
+  width: 50%;
+  white-space: nowrap;
+  line-height: 21px;
+  text-align: center;
+  font-family: Futura;
+  font-style: normal;
+  font-weight: bold;
+  font-size: 14px;
+  color: rgba(129,129,129,1);
+  letter-spacing: 0.7px;
+  padding: 15px;
+  border-bottom: 3px solid rgba(228,228,228,1);
+}
+.active {
+  color: rgba(24,27,30,1) !important;
+  border-bottom: 3px solid rgba(229,112,44,1) !important;
+}
