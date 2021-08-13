@@ -1,0 +1,41 @@
+
+.type {
+  display: flex;
+  justify-content: space-evenly;
+  text-align: center;
+  align-items: center;
+  margin:5px 0;
+}
+.method {
+  display: flex;
+  justify-content: space-evenly;
+  text-align: center;
+  align-items: center;
+  margin:5px 0;
+}
+.label {
+  width: 70px;
+  padding:7px 10px;
+  white-space: nowrap;
+  line-height: 21px;
+  text-align: center;
+  font-family: Futura;
+  font-style: normal;
+  font-weight: bold;
+  font-size: 10px;
+  color: rgba(129,129,129,1);
+  letter-spacing: 0.7px;
+}
+.button {
+  background-color: rgba(229,112,44,1);
+  width: 70px;
+  padding:7px 10px;
+  border-radius: 5px;
+  white-space: nowrap;
+  font-family: Futura;
+  font-style: normal;
+  font-weight: bold;
+  font-size: 10px;
+  color: rgba(255,255,255,1);
+  letter-spacing: 0.7px;  
+}

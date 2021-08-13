@@ -1,0 +1,25 @@
+.footer {
+	position: absolute;
+	display: flex;
+	justify-content: space-evenly;
+	align-items: center;
+	bottom: 0px;
+	background-color: #fff;
+	width: 100%;
+	padding:10px;
+	white-space: nowrap;
+	text-align: center;
+	font-family: Futura;
+	font-style: normal;
+	font-weight: bold;
+	font-size: 9px;
+}
+.svg {
+	width: 22.941px;
+	height: 22.209px;
+	transform: matrix(1,0,0,1,0,0);
+}
+.active {
+	fill: rgba(238,184,43,1);
+	color: rgba(238,184,43,1);
+}

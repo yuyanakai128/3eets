@@ -34,7 +34,6 @@
 #ID3tab_dev {
   display: flex;
   width: 100%;
-  padding:10px;
   align-items: center;
 }
 #recommendation {

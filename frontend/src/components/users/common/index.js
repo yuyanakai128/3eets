@@ -1,28 +1,28 @@
+import { useState } from 'preact/hooks';
 import style from "./style.css";
-import $ from "jquery";
+
 
 const Common = (props) => {
-  $('#'+style.toptab).on('click',function(){
-    console.log($(this));
-  })
+  const [active, setActive] = useState(1);
+  const [second, setSecond] = useState(1);
 	return (
     <>
-      <div id={style.toptab}>
-        <div id={style.exchange}  class={style.active}>
+      <ul id={style.toptab}>
+        <li id={style.exchange} class={active==1?style.active:""} onClick={()=>{setActive(1)}}>
           <span>交換</span>
-        </div>
-        <div id={style.purchase}>
+        </li>
+        <li id={style.purchase} class={active==2?style.active:""} onClick={()=>{setActive(2)}}>
           <span>共同購入</span>
-        </div>
-      </div>
-      <div id={style.ID3tab_dev}>
-        <div id={style.recommendation}>
+        </li>
+      </ul>
+      <ul id={style.ID3tab_dev}>
+        <li id={style.recommendation} class={second==1?style.active:""} onClick={()=>{setSecond(1)}}>
           <span>おすすめ</span>
-        </div>
-        <div id={style.mylist} class = {style.active}>
+        </li>
+        <li id={style.mylist} class={second==2?style.active:""} onClick={()=>{setSecond(2)}}>
           <span>マイリスト</span>
-        </div>
-      </div>
+        </li>
+      </ul>
     </>
   );
 }
