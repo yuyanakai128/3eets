@@ -1,8 +1,8 @@
 import style from "./style.css";
 import Header from "../header";
-import Footer from "../footer";
-import Common from "../common";
-import CommonButton from "../commonButton";
+import Footer from "../../footer";
+import Common from "../../common";
+import CommonButton from "../../commonButton";
 
 // base_url = "http://localhost:8080";
 

@@ -47,7 +47,6 @@ function Header(props){
 			<form onSubmit={search}>
 				<div class="control navbar-item">
 					<input class="input" type="text" name="asset_id" id="asset_id" placeholder="グッズを検索できます。" required/>
-					<button type="submit"></button>
 				</div>
 			</form>
 		</nav>

@@ -8,6 +8,9 @@
 .h_title {
 	font-size: 20px;
 }
+/* .control {
+	width: 80%;
+} */
 .navContainer {
 	display: flex;
 }

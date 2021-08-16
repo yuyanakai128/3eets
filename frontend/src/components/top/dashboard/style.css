@@ -4,4 +4,41 @@
 	border-radius: 5px;
 }
 
+.goodsimage {
+	position: relative;;
+}
+.text1 {
+	left: 9px;
+	top: 4px;
+	position: absolute;
+	white-space: nowrap;
+	text-align: center;
+	font-family: Futura;
+	font-style: normal;
+	font-weight: bold;
+	font-size: 9px;
+	color: rgba(255,255,255,1);
+	letter-spacing: 0.7px;
+	opacity: 0.999;
+	background-color: rgba(247,145,84,1);
+	padding:3px 5px;
+	border-radius: 2px;
+}
+.text2 {
+	left: 9px;
+	top: 24px;
+	position: absolute;
+	white-space: nowrap;
+	text-align: center;
+	font-family: Futura;
+	font-style: normal;
+	font-weight: bold;
+	font-size: 9px;
+	color: rgba(255,255,255,1);
+	letter-spacing: 0.7px;
+	opacity: 0.999;
+	background-color: rgba(247,145,84,1);
+	padding:3px 5px;
+	border-radius: 2px;
+}
  

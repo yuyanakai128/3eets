@@ -1,12 +1,12 @@
 .footer {
-	position: absolute;
+	position:fixed;
 	display: flex;
 	justify-content: space-evenly;
 	align-items: center;
 	bottom: 0px;
 	background-color: #fff;
 	width: 100%;
-	padding:10px;
+	padding:15px 10px 5px 10px;
 	white-space: nowrap;
 	text-align: center;
 	font-family: Futura;
@@ -14,12 +14,27 @@
 	font-weight: bold;
 	font-size: 9px;
 }
+.footer > div {
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+}
 .svg {
 	width: 22.941px;
 	height: 22.209px;
 	transform: matrix(1,0,0,1,0,0);
 }
 .active {
+	transition: all ease-out 200ms;
 	fill: rgba(238,184,43,1);
 	color: rgba(238,184,43,1);
+}
+.subject {
+	text-align: center;
+	font-family: Futura;
+	font-style: normal;
+	font-weight: bold;
+	font-size: 9px;
+	letter-spacing: 0.2px;
+	margin-top:7px;
 }
