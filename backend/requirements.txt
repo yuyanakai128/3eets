@@ -3,4 +3,3 @@ Flask-Cors==3.0.3
 Flask-RESTful==0.3.6
 setuptools~=49.2.0
 iroha~=0.0.5.5
-redis~=3.5.3
